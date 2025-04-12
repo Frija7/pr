@@ -4,7 +4,7 @@ from keras.models import load_model
 from PIL import Image, ImageOps
 import numpy as np
 
-bot = telebot.TeleBot("7894841775:AAGqjDsk-L5eKdXxdxlxO1nCPGLW6g2gLYU")
+bot = telebot.TeleBot("Token")
 
 advices = {
     "пластик": "Пластик можно сдать в специальные контейнеры для переработки.",
