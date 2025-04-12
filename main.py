@@ -66,7 +66,7 @@ def handle_photo(message):
     with open(file_name, "wb") as new_file:
         new_file.write(downloaded_file)
         class_names, confidence_score = bot_classif(file_name)
-        response = f"🔍 Результат классификации:\n📌 Тип отхода: {class_names}\n🎯 Точность: {confidence_score:.2%}\n💡 Совет по утилизации: {get_waste_advice(class_names)}"
+        response = f"🔍 Результат классификации:\n📌 Тип отхода: {class_names}\n🎯 Точность: {confidence_score}\n💡 Совет по утилизации: {get_waste_advice(class_names)}"
         bot.reply_to(message, response)
     
 
