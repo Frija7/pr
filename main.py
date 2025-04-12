@@ -6,6 +6,15 @@ import numpy as np
 
 bot = telebot.TeleBot("7894841775:AAGqjDsk-L5eKdXxdxlxO1nCPGLW6g2gLYU")
 
+advices = {
+    "пластик": "Пластик можно сдать в специальные контейнеры для переработки.",
+    "стекло": "Стекло принимают в пунктах приема или специальных баках.",
+    "металл": "Металлолом принимают в специализированных пунктах.",
+    "бумага": "Макулатуру сдавайте в переработку сухой и чистой.",
+    "органика": "Используйте для компоста или специальные",
+    "опасные отходы": "Это нельзя переработать."
+}
+
 
 def bot_classif(image_path):
         np.set_printoptions(suppress=True)
@@ -35,21 +44,29 @@ def bot_classif(image_path):
         return class_name[2:-1], float(prediction[0][index])
 
 
+def get_waste_advice(waste_type):
+     waste_type = waste_type.lower()
+
+     if waste_type in advices:
+          return advices[waste_type]
+     
+
 @bot.message_handler(commands=['start'])
 def send_hello(message):
     bot.send_message(message.chat.id,"Привет, я EcoVisionBot, отправь мне фото мусора и я определю его тип, и расскажу способ его утилизации")
 
 
 @bot.message_handler(content_types=['photo'])
+
 def handle_photo(message):
     file_info = bot.get_file(message.photo[-1].file_id)
     file_name = file_info.file_path.split("/")[-1]
     downloaded_file = bot.download_file(file_info.file_path)
-
+    
     with open(file_name, "wb") as new_file:
         new_file.write(downloaded_file)
         class_names, confidence_score = bot_classif(file_name)
-        response = f"🔍 Результат классификации:\n📌 Тип отхода: {class_names}\n🎯 Точность: {confidence_score:.2%}"
+        response = f"🔍 Результат классификации:\n📌 Тип отхода: {class_names}\n🎯 Точность: {confidence_score:.2%}\n💡 Совет по утилизации: {get_waste_advice(class_names)}"
         bot.reply_to(message, response)
     
 
